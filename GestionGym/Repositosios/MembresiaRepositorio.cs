@@ -16,7 +16,7 @@ namespace GestionGym.Repositosios
         }
 
 
-        public async Task<DataSet> EjecutarSpMembresia(int proceso, int membresiaID, int clienteID, int tipoDeMembresiaID, DateTime fechaInicio, DateTime fechaVencimiento, string estadoMembresia, int estado)
+        public async Task<DataSet> EjecutarSpMembresia(int proceso, int membresiaID, int clienteID, int tipoDeMembresiaID, DateTime fechaInicio, DateTime fechaVencimiento, string estadoMembresia, string nombre, int estado)
         {
 
             var procesoParam = new SqlParameter("@PROCESO", SqlDbType.Int) { Value = proceso };
@@ -26,6 +26,7 @@ namespace GestionGym.Repositosios
             var fechaInicioParam = new SqlParameter("@FECHAINICIO", SqlDbType.DateTime) { Value = fechaInicio };
             var fechaVencimientoParam = new SqlParameter("@FECHAVENCIMIENTO", SqlDbType.DateTime) { Value = fechaVencimiento };
             var estadoMembresiaParam = new SqlParameter("@ESTADOMEMBRESIA", SqlDbType.VarChar, 50) { Value = estadoMembresia };
+            var nombreParam = new SqlParameter("@NOMBRE", SqlDbType.VarChar, 100) { Value = nombre };
             var estadoParam = new SqlParameter("@ESTADO", SqlDbType.Int) { Value = estado };
 
             var respuestaParam = new SqlParameter("@RESPUESTA", SqlDbType.VarChar, 100);
@@ -43,6 +44,8 @@ namespace GestionGym.Repositosios
                 comand.Parameters.Add(fechaInicioParam);
                 comand.Parameters.Add(fechaVencimientoParam);
                 comand.Parameters.Add(estadoMembresiaParam);
+                comand.Parameters.Add(nombreParam);
+             
                 comand.Parameters.Add(estadoParam);
                 comand.Parameters.Add(respuestaParam);
 

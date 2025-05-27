@@ -21,7 +21,7 @@ namespace GestionGym.Controllers
         public async Task<IActionResult> ObtenerMembresia()
         {
 
-            var respuesta = await _membresiaRepositorio.EjecutarSpMembresia(90, 0, 0, 0, DateTime.Now, DateTime.Now, "", 0);
+            var respuesta = await _membresiaRepositorio.EjecutarSpMembresia(90, 0, 0, 0, DateTime.Now, DateTime.Now, "","", 0);
 
 
             if (respuesta != null && respuesta.Tables.Count > 0)
@@ -54,12 +54,40 @@ namespace GestionGym.Controllers
         }
 
 
+        [HttpGet("ObtenerPagosPorCliente")]
+        public async Task<IActionResult> ObtenerPagosPorcLIENTE(string nombre)
+        {
+            var respuesta = await _membresiaRepositorio.EjecutarSpMembresia(92, 0, 0, 0, DateTime.Now, DateTime.Now, "", nombre, 0);
+
+            if (respuesta != null && respuesta.Tables.Count > 0)
+            {
+                var ListaResultado = new List<Dictionary<string, object>>();
+
+                foreach (DataRow Fila in respuesta.Tables[0].Rows)
+                {
+                    var filaDatos = new Dictionary<string, object>();
+
+                    foreach (DataColumn Columna in respuesta.Tables[0].Columns)
+                    {
+                        filaDatos[Columna.ColumnName] = Fila[Columna];
+                    }
+
+                    ListaResultado.Add(filaDatos);
+                }
+
+                return Ok(ListaResultado);
+            }
+            else
+            {
+                return NotFound("No se encontraron pagos para el cliente especificado.");
+            }
+        }
 
         [HttpGet("{membresiaID}")]
         public async Task<IActionResult> ObtenerMembresiaXID(int membresiaID)
         {
 
-            var respuesta = await _membresiaRepositorio.EjecutarSpMembresia(91, membresiaID, 0, 0, DateTime.Now, DateTime.Now, "", 0);
+            var respuesta = await _membresiaRepositorio.EjecutarSpMembresia(91, membresiaID, 0, 0, DateTime.Now, DateTime.Now, "", "", 0);
 
 
             if (respuesta != null && respuesta.Tables.Count > 0 && respuesta.Tables[0].Rows.Count > 0)
@@ -101,7 +129,7 @@ namespace GestionGym.Controllers
                membresia.clienteID,
                membresia.tipoDeMembresiaID,
                membresia.fechaInicio,
-               membresia.fechaVencimiento,
+               membresia.fechaVencimiento, membresia.nombre,
                membresia.estadoMembresia,
                1
 
@@ -138,7 +166,7 @@ namespace GestionGym.Controllers
                membresia.tipoDeMembresiaID,
                membresia.fechaInicio,
                membresia.fechaVencimiento,
-               membresia.estadoMembresia,
+               membresia.estadoMembresia,membresia.nombre,
                membresia.estado
 
 
@@ -164,7 +192,7 @@ namespace GestionGym.Controllers
 
                 3,
                 membresiaID,
-                0, 0, DateTime.Now, DateTime.Now, "", 0
+                0, 0, DateTime.Now, DateTime.Now, "", "", 0
 
 
                 );

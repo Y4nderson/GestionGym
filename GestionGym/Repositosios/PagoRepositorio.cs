@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using GestionGym.Data;
+using GestionGym.Modelos;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,10 +14,13 @@ namespace GestionGym.Repositosios
         {
             _context = context;
         }
-
+        public async Task<bool> ClienteExiste(string cedula)
+        {
+            return await _context.Set<Cliente>().AnyAsync(c => c.cedula == cedula);
+        }
 
         public async Task<DataSet> EjecutarSpPago(int proceso, int pago, string cedula, string tipoMembresia,
-            string metodoDePago, string concepto,string usuario,int estado)
+            string metodoDePago, string concepto,string usuario, DateTime FechaInicio , DateTime FechaFin, int estado)
         {
             var dataSet = new DataSet();
             var procesoParam = new SqlParameter("@PROCESO", SqlDbType.Int) {Value = proceso };
@@ -26,6 +30,8 @@ namespace GestionGym.Repositosios
             var metodoDePagoParam = new SqlParameter("@METODOPAGO", SqlDbType.VarChar,50) {Value = metodoDePago };
             var conceptoParam = new SqlParameter("@CONCEPTO", SqlDbType.VarChar, 255) {Value = concepto };
             var usuarioParam = new SqlParameter("@USUARIO", SqlDbType.VarChar,100) {Value = usuario };
+            var FechaInicioParam = new SqlParameter("@FECHA_INICIO", SqlDbType.Date) {Value = FechaInicio };
+            var FechaFinParam = new SqlParameter("@FECHA_FIN", SqlDbType.Date) {Value = FechaFin };
             var estadoParam = new SqlParameter("@ESTADO", SqlDbType.Int) {Value = estado };
             var respuestaParam = new SqlParameter("@RESPUESTA", SqlDbType.VarChar, 100);
             respuestaParam.Direction = ParameterDirection.Output;
@@ -43,6 +49,8 @@ namespace GestionGym.Repositosios
                 comand.Parameters.Add(metodoDePagoParam);
                 comand.Parameters.Add(conceptoParam);
                 comand.Parameters.Add(usuarioParam);
+                comand.Parameters.Add(FechaInicioParam);
+                comand.Parameters.Add(FechaFinParam);
                 comand.Parameters.Add(estadoParam);
                 comand.Parameters.Add(respuestaParam);
 
