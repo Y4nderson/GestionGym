@@ -159,6 +159,42 @@ namespace GestionGym.Controllers
 
         }
 
+        [HttpGet("vencidos")]
+        public async Task<IActionResult> ObtenerClienteVencidos()
+        {
+
+            var respuesta = await _clienteRepositorio.EjecutarSpCliente(97, 0, "", "", "", "", 0);
+
+
+            if (respuesta != null && respuesta.Tables.Count > 0)
+            {
+
+
+                var ListaResultado = new List<Dictionary<string, object>>();
+
+                foreach (DataRow Fila in respuesta.Tables[0].Rows)
+                {
+
+                    var filaDatos = new Dictionary<string, object>();
+
+
+                    foreach (DataColumn Columna in respuesta.Tables[0].Columns)
+                    {
+
+                        filaDatos[Columna.ColumnName] = Fila[Columna];
+
+                    }
+                    ListaResultado.Add(filaDatos);
+                }
+                return Ok(ListaResultado);
+            }
+            else
+            {
+                return NotFound("No se encontraron datos");
+            }
+
+        }
+
         [HttpGet("cantidadTotalClientes")]
         public async Task<IActionResult> ObtenerClienteCantidad()
         {
@@ -228,6 +264,38 @@ namespace GestionGym.Controllers
         }
 
 
+        [HttpGet("buscar")]
+        public async Task<IActionResult> BuscarClientes([FromQuery] string filtro)
+        {
+            var respuesta = await _clienteRepositorio.EjecutarSpCliente(95, 0, filtro, filtro, filtro, "", 0);
+
+            if (respuesta != null && respuesta.Tables.Count > 0 && respuesta.Tables[0].Rows.Count > 0)
+            {
+                var clientes = new List<Dictionary<string, object>>();
+
+                foreach (DataRow fila in respuesta.Tables[0].Rows)
+                {
+                    var cliente = new Dictionary<string, object>();
+
+                    foreach (DataColumn columna in respuesta.Tables[0].Columns)
+                    {
+                        cliente[columna.ColumnName] = fila[columna];
+                    }
+
+                    clientes.Add(cliente);
+                }
+
+                return Ok(clientes);
+            }
+            else
+            {
+                return NotFound("No se encontraron clientes.");
+            }
+        }
+
+
+
+
         [HttpPost]
         public async Task<IActionResult> CrearCliente([FromBody] Cliente cliente)
         {
@@ -244,7 +312,7 @@ namespace GestionGym.Controllers
                cliente.cedula,
                cliente.telefono,
                cliente.correo,
-                1
+                0
 
 
 

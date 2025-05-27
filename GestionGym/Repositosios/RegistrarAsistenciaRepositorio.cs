@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using GestionGym.Data;
+using GestionGym.Modelos;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,8 +15,13 @@ namespace GestionGym.Repositosios
             _context = context;  
         }
 
+        public async Task<bool> ClienteExiste(string cedula)
+        {
+            return await _context.Set<Cliente>().AnyAsync(c => c.cedula == cedula);
+        }
 
-        public async Task<DataSet> EjecutarSpCliente(int proceso, string cedula)
+
+        public async Task<DataSet> EjecutarSpRegistrarAsistencia(int proceso, string cedula)
         {
             var procesoParam = new SqlParameter("@PROCESO", SqlDbType.Int) { Value = proceso };
             var cedulaParam = new SqlParameter("@CEDULA", SqlDbType.VarChar, 20) { Value = cedula };

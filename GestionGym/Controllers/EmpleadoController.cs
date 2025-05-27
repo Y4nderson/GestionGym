@@ -19,7 +19,7 @@ namespace GestionGym.Controllers
             _empleadoRepositorio = empleadoRepositorio;
         }
 
-        [Authorize]
+      
         [HttpGet]
         public async Task<IActionResult> ObtenerEmpleado()
         {
@@ -56,6 +56,34 @@ namespace GestionGym.Controllers
 
         }
 
+        [HttpGet("ObtenerPagosPorEmpleado")]
+        public async Task<IActionResult> ObtenerPagosPorEmpleado(string nombreEmpleado)
+        {
+            var respuesta = await _empleadoRepositorio.EjecutarSpEmpleado(95, 0, nombreEmpleado, "", "", "", "", 0, 0, "");
+
+            if (respuesta != null && respuesta.Tables.Count > 0)
+            {
+                var ListaResultado = new List<Dictionary<string, object>>();
+
+                foreach (DataRow Fila in respuesta.Tables[0].Rows)
+                {
+                    var filaDatos = new Dictionary<string, object>();
+
+                    foreach (DataColumn Columna in respuesta.Tables[0].Columns)
+                    {
+                        filaDatos[Columna.ColumnName] = Fila[Columna];
+                    }
+
+                    ListaResultado.Add(filaDatos);
+                }
+
+                return Ok(ListaResultado);
+            }
+            else
+            {
+                return NotFound("No se encontraron pagos para el cliente especificado.");
+            }
+        }
 
 
         [HttpGet("{empleadoID}")]

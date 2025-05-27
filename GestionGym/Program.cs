@@ -29,7 +29,7 @@ builder.Services.AddScoped<RegistrarAsistenciaRepositorio, RegistrarAsistenciaRe
 builder.Services.AddScoped<AsistenciaRepositorio, AsistenciaRepositorio>();
 builder.Services.AddScoped<LoginRepositorio, LoginRepositorio>();
 
-
+//GITRAMA
 
 var key = builder.Configuration.GetValue<string>("ApiSettings:Secreta");
 
@@ -137,6 +137,8 @@ builder.Services.AddSwaggerGen(options =>
 
 
 
+
+
 builder.Services.AddCors(P => P.AddPolicy("PolicyCors", buid =>
 {
 
@@ -150,7 +152,6 @@ builder.Services.AddCors(P => P.AddPolicy("PolicyCors", buid =>
 
 ));
 
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -160,7 +161,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseCors("PolicyCors");
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 

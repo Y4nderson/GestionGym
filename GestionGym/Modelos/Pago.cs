@@ -13,6 +13,8 @@
         public string concepto { get; set; }
 
         public string usuario { get; set; }
+        public DateTime fechaInicio { get; set; }
+        public DateTime fechaFin { get; set; }
         public int estado { get; set; }
     }
 }

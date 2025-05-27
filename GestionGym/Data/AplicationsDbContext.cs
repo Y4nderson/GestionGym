@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using GestionGym.Modelos;
+using Microsoft.EntityFrameworkCore;
 
 namespace GestionGym.Data
 {
@@ -10,5 +11,6 @@ namespace GestionGym.Data
         {
             
         }
+        public DbSet<Cliente> Cliente { get; set; }
     }
 }

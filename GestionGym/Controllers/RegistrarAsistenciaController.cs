@@ -24,10 +24,17 @@ namespace GestionGym.Controllers
 
             if (!ModelState.IsValid || cliente == null)
             {
-                return BadRequest();
+                return BadRequest("Datos inválidos.");
             }
 
-            var respuesta = await _registrarAsistenciaRepositorio.EjecutarSpCliente(
+
+            bool existeCliente = await _registrarAsistenciaRepositorio.ClienteExiste(cliente.cedula);
+            if (!existeCliente)
+            {
+                return NotFound("No se encontró un cliente con esa cédula.");
+            }
+
+            var respuesta = await _registrarAsistenciaRepositorio.EjecutarSpRegistrarAsistencia(
                cliente.proceso,
                cliente.cedula
 
@@ -37,16 +44,23 @@ namespace GestionGym.Controllers
 
                 );
 
-            if (respuesta != null && respuesta.HasErrors == false)
+            if (respuesta != null)
             {
                 return Ok();
 
             }
             else
             {
-                return StatusCode(500, "Error del servidor ");
+                return StatusCode(500, "Error al registrar la asistencia.");
             }
 
         }
+
+
+
+
+
+        /**/
+
     }
 }

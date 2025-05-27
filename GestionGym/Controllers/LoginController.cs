@@ -46,7 +46,9 @@ namespace GestionGym.Controllers
                     usuarioID = Convert.ToInt32(row["usuarioID"].ToString()),
                     usuario = row["usuario"].ToString(),
                     nombreCompleto = row["nombreCompleto"].ToString(),
+                    correoElectronico = row["correoElectronico"].ToString(),
                     rol = row["rol"].ToString(),
+                    permisos = row["permisos"].ToString(),
                 }).ToList();
 
 
